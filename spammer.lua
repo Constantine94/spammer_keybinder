@@ -1,6 +1,7 @@
 local imgui = require 'imgui'
 require 'spammer.config'
 require 'spammer.style'
+require 'spammer.events'
 
 -- Cheat status
 status = false
@@ -10,6 +11,7 @@ total_disable = false
 main_window_x, main_window_y = 705, 397
 hotkey_window_x, hotkey_window_y = 370, 372
 restart_window_x, restart_window_y = 400, 300
+sound_window_x, sound_window_y = 370, 190
 
 -- Auto Spammer Window
 main_message             =   "https://discord.gg/zGCZXnZrc4"
@@ -48,6 +50,12 @@ combo_restart_selected2  =   imgui.ImInt(0)
 ip                       =   imgui.ImBuffer(150)
 port                     =   imgui.ImBuffer(150)
 username                 =   imgui.ImBuffer(150)
+
+-- Hit sound
+sound_message            =   "Hit sound"
+loaded_songs             =   false
+sound_window             =   imgui.ImBool(false)
+combo_sound_selected     =   imgui.ImInt(0)
 
 
 function imgui.OnDrawFrame()
@@ -101,6 +109,8 @@ function imgui.OnDrawFrame()
 	imgui.Checkbox("Hotkeys", hotkeys_menu)
 	imgui.SameLine()
 	imgui.Checkbox("Reconnect", reconnect_window)
+	imgui.SameLine()
+	imgui.Checkbox("Sound", sound_window)
 	imgui.EndChild()
 
 	-- Child 3
@@ -273,6 +283,28 @@ function imgui.OnDrawFrame()
 
 		imgui.End()
 	end
+	if sound_window.v then
+		imgui.SetNextWindowSize(imgui.ImVec2(sound_window_x, sound_window_y))
+		imgui.Begin("Hotkeys", _, imgui.WindowFlags.NoResize)
+		imgui.BeginChild("Start", imgui.ImVec2(350, 150), true)
+		imgui.Combo("Sounds", combo_sound_selected, sounds, 5)
+		if imgui.Button("Load sound", imgui.ImVec2(106, 22)) then
+			path_to_song = "moonloader/sounds/" .. sounds[combo_sound_selected.v + 1]
+			if doesFileExist(path_to_song) then
+				sound_message = "Song loaded"
+				load_sound(path_to_song)
+				loaded_songs = true
+			else
+				sound_message = "Song can't be loaded"
+			end
+		end
+		imgui.TextColored(imgui.ImVec4(255.0, 0.0, 0.0, 1.0), "BOT:")
+		imgui.SameLine()
+		imgui.Text(sound_message)
+		imgui.EndChild()
+		imgui.End()
+	end
+
 	imgui.End()
 
 end
