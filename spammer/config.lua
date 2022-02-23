@@ -1,7 +1,11 @@
 require 'math'
 
--- De aici iti poti adauga servere
+sounds = {
+    "headshoot.mp3",
+    "Viorel@TAYOTA - woowww.mp3"
+}
 
+-- De aici iti poti adauga servere
 ip_and_port = {
     {"rpg.og-times.ro", "777"},
     {"rpg.crowland.ro", "7777"},
@@ -133,6 +137,10 @@ function start_hotkey_attack()
             end
         end
     end
+end
+
+function load_sound(song_path)
+    audio_handler = loadAudioStream(song_path)
 end
 
 keys = {
