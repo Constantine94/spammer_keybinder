@@ -9,7 +9,7 @@ total_disable = false
 -- Windows Geometry
 main_window_x, main_window_y = 705, 397
 hotkey_window_x, hotkey_window_y = 370, 372
-restart_window_x, restart_window_y = 400, 257
+restart_window_x, restart_window_y = 400, 300
 
 -- Auto Spammer Window
 main_message             =   "https://discord.gg/zGCZXnZrc4"
@@ -42,7 +42,9 @@ reconnect_message        =   "Reconnect"
 reconnect_window         =   imgui.ImBool(false)
 last_ip                  =   imgui.ImBool(false)
 combo_add_name_by        =   imgui.ImBool(false)
+combo_add_server_by      =   imgui.ImBool(false)
 combo_restart_selected   =   imgui.ImInt(0)
+combo_restart_selected2  =   imgui.ImInt(0)
 ip                       =   imgui.ImBuffer(150)
 port                     =   imgui.ImBuffer(150)
 username                 =   imgui.ImBuffer(150)
@@ -160,19 +162,30 @@ function imgui.OnDrawFrame()
 		imgui.EndChild()
 
 		-- Child 2
-		imgui.BeginChild("Auto", imgui.ImVec2(380, 128), true)
+		imgui.BeginChild("Auto", imgui.ImVec2(380, 175), true)
 		imgui.Combo("Names", combo_restart_selected, usernames, 7)
+		imgui.Combo("Servers", combo_restart_selected2, return_servers_ip(), 7)
+
+		if imgui.Checkbox("Add server and port from combo list", combo_add_server_by) then
+			if combo_add_server_by.v then
+				ip.v = ip_and_port[combo_restart_selected2.v + 1][1]
+				port.v = ip_and_port[combo_restart_selected2.v + 1][2]
+			end
+		end
+
 		if imgui.Checkbox("Add name from combo list", combo_add_name_by) then
 			if combo_add_name_by.v then
 				username.v = usernames[combo_restart_selected.v + 1]
 			end
 		end
-		if imgui.Checkbox("Auto insert IP/PORT", last_ip) then
+
+		if imgui.Checkbox("Auto insert last IP/PORT", last_ip) then
 			if last_ip.v then
 				local i, p = sampGetCurrentServerAddress()
 				ip.v, port.v = i, tostring(p)
 			end
 		end
+
 		if imgui.Button("Connect", imgui.ImVec2(106, 22)) then
 			if (#ip.v == 0 or #port.v == 0 or #username.v == 0) then
 				reconnect_message = "Date lipsa/invalide in input-uri"
