@@ -6,6 +6,7 @@
 # Activare
 - La intrarea in joc se apasa Ctrl-stanga si R simultan pentru a restarta script-ul.
 - Se activeaza de pe tasta F2.
+- Se dezactiveaza total de pe tasta F12.
 
 # Info
 - Spammer_Keybinder este un multi-tool conceput pentru spama diverse cuvinte/propozitii/comenzi fie automat, fie in functie de un hotkey.
