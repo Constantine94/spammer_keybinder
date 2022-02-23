@@ -1,6 +1,6 @@
 require 'math'
 
-
+-- De aici iti poti adauga servere
 
 ip_and_port = {
     {"rpg.og-times.ro", "777"},
@@ -8,9 +8,11 @@ ip_and_port = {
     {"rpg.b-hood.ro", "7777"},
     {"ruby.nephrite.ro", "7777"},
     {"blue.bugged.ro", "7777"},
-    {"rpg1.b-zone.ro", "7777"}
+    {"rpg1.b-zone.ro", "7777"},
+    {"rpg.gradinareni.ro", "7777"}
 }
--- Iti poti adauga numele tale aici
+
+-- De aici iti poti adauga nickname-uri
 usernames = {
     "Cristian",
     "Criss",
@@ -19,14 +21,11 @@ usernames = {
     "Cistii"
 }
 
--- Iti poti adauga cate profiluri vrei
+-- De aici iti poti adauga profiluri
 configs = {
     {"war"                 , "/war", "/wars", "/war3", "/war5"},
     {"turf"                , "turf", "/turfs", "/attack"}
 }
--- function log(text)
---     sampAddChatMessage(string.format("{ff0000}Test: {ffffff}%s", text))
--- end
 
 function return_servers_ip()
     local array = {}
