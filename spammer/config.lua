@@ -1,5 +1,15 @@
 require 'math'
 
+
+
+ip_and_port = {
+    {"rpg.og-times.ro", "777"},
+    {"rpg.crowland.ro", "7777"},
+    {"rpg.b-hood.ro", "7777"},
+    {"ruby.nephrite.ro", "7777"},
+    {"blue.bugged.ro", "7777"},
+    {"rpg1.b-zone.ro", "7777"}
+}
 -- Iti poti adauga numele tale aici
 usernames = {
     "Cristian",
@@ -17,6 +27,14 @@ configs = {
 -- function log(text)
 --     sampAddChatMessage(string.format("{ff0000}Test: {ffffff}%s", text))
 -- end
+
+function return_servers_ip()
+    local array = {}
+    for c, x in ipairs(ip_and_port) do
+        table.insert(array, x[1])
+    end
+    return array
+end
 
 function clear_all_commands()
     for c, comands in ipairs(commands_array) do
