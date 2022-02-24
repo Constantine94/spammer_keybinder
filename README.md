@@ -9,7 +9,10 @@
 - Se dezactiveaza total de pe tasta F12.
 
 # Info
-- Spammer_Keybinder este un multi-tool conceput pentru spama diverse cuvinte/propozitii/comenzi fie automat, fie in functie de un hotkey.
+- Spammer_Keybinder este un multi-tool conceput pentru:
+ - a spama diverse cuvinte/propozitii/comenzi automat
+ - a spama diverse cuvinte/propozitii/comenzi in functie de un hotkey.
+ - a selecta un mp3/wav specific atunci cand lovesti cu arma un anumit player
 
-# Spammer_Keybinder
+# Photo
 ![alt text](https://raw.githubusercontent.com/Constantine94/spammer_keybinder/main/cheat.png)
