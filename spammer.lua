@@ -53,10 +53,12 @@ username                 =   imgui.ImBuffer(150)
 
 -- Hit sound
 sound_message            =   "Hit sound"
-loaded_songs             =   false
 sound_window             =   imgui.ImBool(false)
 combo_sound_selected     =   imgui.ImInt(0)
 
+thread_helmet_alive      =   false
+is_song_loaded           =   false
+auto_helmet              =   imgui.ImBool(false)
 
 function imgui.OnDrawFrame()
 
@@ -80,6 +82,17 @@ function imgui.OnDrawFrame()
 			delay_slider.v = delay_input.v
 		end
 	end
+	imgui.SameLine()
+	if imgui.Checkbox("Delete", delete_all_commands) then
+		if thread_alive == false then
+			if delete_all_commands.v then
+				clear_all_commands()
+				main_message = "Toate mesajele au fost sterse"
+			end
+		else
+			main_message = "Nu poti sterge comenzi cat timp codul e deja pornit"
+		end
+	end
 	imgui.InputText("Command", command_input)
 	if imgui.Button("Add Command", imgui.ImVec2(161, 22)) then
 		if string.len(tostring(command_input.v)) ~= 0 then 
@@ -95,22 +108,27 @@ function imgui.OnDrawFrame()
 			main_message = "Nu poti sterge comenzi cat timp codul e deja pornit" 
 		end
 	end
-	if imgui.Checkbox("Remove all", delete_all_commands) then
-		if thread_alive == false then
-			if delete_all_commands.v then
-				clear_all_commands()
-				main_message = "Toate mesajele au fost sterse"
-			end
-		else
-			main_message = "Nu poti sterge comenzi cat timp codul e deja pornit"
-		end
-	end
-	imgui.SameLine()
+
 	imgui.Checkbox("Hotkeys", hotkeys_menu)
 	imgui.SameLine()
 	imgui.Checkbox("Reconnect", reconnect_window)
 	imgui.SameLine()
 	imgui.Checkbox("Sound", sound_window)
+	imgui.SameLine()
+	if imgui.Checkbox("Auto Helmet", auto_helmet) then
+		if auto_helmet.v then
+			if thread_helmet_alive == false then
+				thread3 = lua_thread.create(auto_put_helmet)
+				thread3:run()
+				thread_helmet_alive = true
+			end
+		else
+			if thread_helmet_alive then
+				thread3:terminate()
+				thread_helmet_alive = false
+			end
+		end
+	end
 	imgui.EndChild()
 
 	-- Child 3
@@ -189,12 +207,6 @@ function imgui.OnDrawFrame()
 			end
 		end
 
-		if imgui.Checkbox("Auto insert last IP/PORT", last_ip) then
-			if last_ip.v then
-				local i, p = sampGetCurrentServerAddress()
-				ip.v, port.v = i, tostring(p)
-			end
-		end
 
 		if imgui.Button("Connect", imgui.ImVec2(106, 22)) then
 			if (#ip.v == 0 or #port.v == 0 or #username.v == 0) then
@@ -283,6 +295,8 @@ function imgui.OnDrawFrame()
 
 		imgui.End()
 	end
+
+    -- Menu 4 (Hitsound)
 	if sound_window.v then
 		imgui.SetNextWindowSize(imgui.ImVec2(sound_window_x, sound_window_y))
 		imgui.Begin("Hotkeys", _, imgui.WindowFlags.NoResize)
@@ -291,11 +305,21 @@ function imgui.OnDrawFrame()
 		if imgui.Button("Load sound", imgui.ImVec2(106, 22)) then
 			path_to_song = "moonloader/sounds/" .. sounds[combo_sound_selected.v + 1]
 			if doesFileExist(path_to_song) then
-				sound_message = "Song loaded"
 				load_sound(path_to_song)
-				loaded_songs = true
+				sound_message = "Sunet incarcat cu succes"
+				is_song_loaded = true
 			else
-				sound_message = "Song can't be loaded"
+				sound_message = "Sunetul nu a fost gasit"
+			end
+		end
+		
+		if imgui.Button("Unload sound", imgui.ImVec2(106, 22)) then
+			if is_song_loaded then
+				unload_sound()
+				sound_message = "Sunetul eliminat din memorie"
+				is_song_loaded = false
+			else
+				sound_message = "Nu exista sunete incarcate"
 			end
 		end
 		imgui.TextColored(imgui.ImVec4(255.0, 0.0, 0.0, 1.0), "BOT:")
