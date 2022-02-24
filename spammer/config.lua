@@ -2,7 +2,8 @@ require 'math'
 
 sounds = {
     "headshoot.mp3",
-    "Viorel@TAYOTA - woowww.mp3"
+    "Viorel@TAYOTA - woowww.mp3",
+    "shoot.mp3"
 }
 
 -- De aici iti poti adauga servere
@@ -141,6 +142,28 @@ end
 
 function load_sound(song_path)
     audio_handler = loadAudioStream(song_path)
+end
+
+function unload_sound()
+    releaseAudioStream(audio_handler)
+end
+
+function auto_put_helmet()
+    local was_called_ph = false
+    while true do 
+        wait(0)
+        if isCharOnAnyBike(playerPed) then
+            if was_called_ph == false then
+                lua_thread.create(function()
+                    wait(700)
+                    sampSendChat("ph")
+                end)
+                was_called_ph = true
+            end
+        else
+            was_called_ph = false
+        end
+    end
 end
 
 keys = {
