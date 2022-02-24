@@ -156,7 +156,7 @@ function auto_put_helmet()
             if was_called_ph == false then
                 lua_thread.create(function()
                     wait(700)
-                    sampSendChat("ph")
+                    sampSendChat("/ph")
                 end)
                 was_called_ph = true
             end
